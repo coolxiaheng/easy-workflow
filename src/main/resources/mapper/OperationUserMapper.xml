@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winsse.sc.wf.mapper.OperationUserMapper">
+
+    <select id="getOperationUserId" resultType="com.winsse.sc.wf.entity.OperationUser">
+        SELECT
+          a.user_id AS "userId",
+          c.user_name AS "userName"
+        FROM t_wf_operation_user a
+        JOIN t_wf_operation b ON a.operation_id = b.operation_id
+        LEFT JOIN t_configure_user c ON c.user_id = a.user_id
+        WHERE b.node_id = #{nodeId}
+        <if test="filterCode != null and filterCode != ''">
+            AND locate(#{filterCode}, a.move_filter_code) > 0
+        </if>
+        <if test="operationId != null and operationId != ''">
+            AND b.operation_id = #{operationId}
+        </if>
+        GROUP BY a.user_id
+    </select>
+
+
+    <select id="getUserOperationPermisstion" resultType="com.winsse.sc.wf.entity.Operation">
+        SELECT
+          a.operation_id AS "operationId",
+          a.operation_name AS "operationName",
+          a.node_id AS "nodeId"
+        FROM t_wf_operation a
+        JOIN t_wf_operation_user b ON a.operation_id = b.operation_id
+        WHERE a.node_id = #{nodeId} AND b.user_id = #{userId}
+
+    </select>
+</mapper>

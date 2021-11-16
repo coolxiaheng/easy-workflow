@@ -1,0 +1,20 @@
+server:
+  # 程序端口
+  port: 8095
+spring:
+  application:
+    # 注册到 nacos 注册中心的服务名
+    name: wf
+  cloud:
+    nacos:
+      discovery:
+        # nacos 注册中心的地址
+        server-addr: 127.0.0.1:8848
+  freemarker:
+    checkTemplateLocation: false
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

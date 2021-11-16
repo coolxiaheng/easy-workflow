@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winsse.sc.wf.mapper.ProcessMapper">
+
+    <select id="getProcess" resultType="com.winsse.sc.wf.entity.Process">
+        SELECT
+          a.event_id AS "eventId",
+          a.update_time AS "updateTime"
+        FROM t_wf_process a
+        JOIN t_wf_process_user b ON a.process_id = b.process_id
+        WHERE b.user_id = #{userId} AND a.node_id = #{nodeId}
+        AND a.current_node_flag = 1
+    </select>
+
+
+    <select id="getNodeAndProcess" resultType="com.winsse.sc.wf.entity.vo.ProcessVo">
+        SELECT
+          a.process_id AS "processId",
+          a.current_node_flag AS "currentNodeFlag",
+          b.node_id AS "nodeId",
+          b.node_name AS "nodeName"
+        FROM t_wf_process a
+        LEFT JOIN t_wf_node b ON a.node_id = b.node_id
+        WHERE a.event_id = #{eventId}
+        AND a.work_flow_id = #{workFlowId}
+        ORDER BY a.process_id
+    </select>
+
+</mapper>
